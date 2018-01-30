@@ -9,13 +9,13 @@
 | It's a breeze. Simply tell Laravel the URIs it should respond to
 | and give it the controller to call when that URI is requested.
 |
-*/
+ */
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 get('/', function () {
-    return redirect('/blog');
+	return redirect('/blog');
 });
 
 get('blog', 'BlogController@index');
@@ -23,15 +23,19 @@ get('blog/{slug}', 'BlogController@showPost');
 
 // Admin area
 get('admin', function () {
-    return redirect('/admin/post');
+	return redirect('/admin/post');
 });
 
 $router->group(['namespace' => 'Admin', 'middleware' => 'auth'], function () {
-    resource('admin/post', 'PostController');
-    resource('admin/tag', 'TagController', ['except' => 'show']);
-    get('admin/upload', 'UploadController@index');
-});
+	resource('admin/post', 'PostController');
+	resource('admin/tag', 'TagController', ['except' => 'show']);
+	get('admin/upload', 'UploadController@index');
 
+	post('admin/upload/file', 'UploadController@uploadFile');
+	delete('admin/upload/file', 'UploadController@deleteFile');
+	post('admin/upload/folder', 'UploadController@createFolder');
+	delete('admin/upload/folder', 'UploadController@deleteFolder');
+});
 
 // Logging in and out
 get('/auth/login', 'Auth\AuthController@getLogin');

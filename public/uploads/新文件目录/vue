@@ -1,0 +1,374 @@
+Element 组件  
+import Vue from 'vue'  
+```json
+import {
+  Pagination,
+  Dialog,
+  Autocomplete,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  Menu,
+  Submenu,
+  MenuItem,
+  MenuItemGroup,
+  Input,
+  InputNumber,
+  Radio,
+  RadioGroup,
+  RadioButton,
+  Checkbox,
+  CheckboxButton,
+  CheckboxGroup,
+  Switch,
+  Select,
+  Option,
+  OptionGroup,
+  Button,
+  ButtonGroup,
+  Table,
+  TableColumn,
+  DatePicker,
+  TimeSelect,
+  TimePicker,
+  Popover,
+  Tooltip,
+  Breadcrumb,
+  BreadcrumbItem,
+  Form,
+  FormItem,
+  Tabs,
+  TabPane,
+  Tag,
+  Tree,
+  Alert,
+  Slider,
+  Icon,
+  Row,
+  Col,
+  Upload,
+  Progress,
+  Badge,
+  Card,
+  Rate,
+  Steps,
+  Step,
+  Carousel,
+  CarouselItem,
+  Collapse,
+  CollapseItem,
+  Cascader,
+  ColorPicker,
+  Transfer,
+  Container,
+  Header,
+  Aside,
+  Main,
+  Footer,
+  Loading,
+  MessageBox,
+  Message,
+  Notification
+} 
+from 'element-ui'
+```
+Vue.use(Pagination)
+Vue.use(Dialog)
+Vue.use(Autocomplete)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
+Vue.use(Menu)
+Vue.use(Submenu)
+Vue.use(MenuItem)
+Vue.use(MenuItemGroup)
+Vue.use(Input)
+Vue.use(InputNumber)
+Vue.use(Radio)
+Vue.use(RadioGroup)
+Vue.use(RadioButton)
+Vue.use(Checkbox)
+Vue.use(CheckboxButton)
+Vue.use(CheckboxGroup)
+Vue.use(Switch)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(OptionGroup)
+Vue.use(Button)
+Vue.use(ButtonGroup)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(DatePicker)
+Vue.use(TimeSelect)
+Vue.use(TimePicker)
+Vue.use(Popover)
+Vue.use(Tooltip)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Tabs)
+Vue.use(TabPane)
+Vue.use(Tag)
+Vue.use(Tree)
+Vue.use(Alert)
+Vue.use(Slider)
+Vue.use(Icon)
+Vue.use(Row)
+Vue.use(Col)
+Vue.use(Upload)
+Vue.use(Progress)
+Vue.use(Badge)
+Vue.use(Card)
+Vue.use(Rate)
+Vue.use(Steps)
+Vue.use(Step)
+Vue.use(Carousel)
+Vue.use(CarouselItem)
+Vue.use(Collapse)
+Vue.use(CollapseItem)
+Vue.use(Cascader)
+Vue.use(ColorPicker)
+Vue.use(Container)
+Vue.use(Header)
+Vue.use(Aside)
+Vue.use(Main)
+Vue.use(Footer)
+
+Vue.use(Loading.directive)
+
+Vue.prototype.$loading = Loading.service
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$prompt = MessageBox.prompt
+Vue.prototype.$notify = Notification
+Vue.prototype.$message = Message
+
+## element 组件布局
+1、分栏间隔
+-- 间距20 
+	<el-row :gutter="20">
+		<el-col :span="12">...</el-col>
+		<el-col :span="12">...</el-col>
+	</el-row>
+
+	-- col 参数
+		. span 所占列数 默认 24
+		. offset 偏移
+		. push 向右移动格数
+		. pull 向左移动格数
+		. xs <768px
+		. sm >= 768px
+		. md >= 992px
+		. lg >= 1200px
+		. xl >= 1920px
+
+2、分栏偏移
+-- offset
+	<el-row>
+		<el-col :span="6" :offset="6">
+			<div>...</div>
+		</el-col>
+	</el-row>
+
+3、对齐方式
+
+-- flex方式对齐
+	<el-row type="flex">
+		<el-clo :span="6">...</el-clo>
+		...
+	</el-row>
+
+-- flex方式对齐 水平居中 justify
+	<el-row type="flex" justify="center">
+		<el-col :span="6">...</el-col>
+		...
+	</el-row>
+
+	- justify flex布局 水平对齐方式
+		. center
+		. end 右对齐
+		. speace-between 两边对齐对齐
+		. space-around 分散对齐
+
+	- align flex布局 垂直对齐方式
+		. top 默认
+		. center 居中
+
+4、响应式布局
+	<el-row>
+	 	<el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
+	 		<div>...</div>
+	 	</el-col>
+	 </el-row>
+
+## Container 布局容器
+1、el-container
+	<el-container>
+		<el-header>header</el-header>
+		<el-main>...</el-main>
+		<el-footer>footer</el-footer>
+	</el-container>
+
+	-- 值
+		. el-header 
+			· height 默认 60px
+		. el-footer
+			· height 默认 60px
+		. el-main
+		. el-aside
+			. width 默认300px
+	
+-- 嵌套
+		<el-container>
+		  	<el-header>Header</el-header>
+		  	<el-container>
+		    	<el-aside width="200px">Aside</el-aside>
+		    	<el-container>
+		      	<el-main>Main</el-main>
+		      	<el-footer>Footer</el-footer>
+		    </el-container>
+		  </el-container>
+		</el-container>
+
+## 颜色与icon
+-- 颜色
+	<el-button type="primary" icon="el-icon-search">搜索</el-button>
+
+## 按钮
+-- 默认
+	<el-button type="primary">...</el-button>
+-- 朴素
+	<el-button type="success" plain>...</el-button>
+-- 圆角
+	<el-button type="wraning" round>...</el-button>
+-- 禁用状态
+	<el-button disabled>...</el-button>
+-- 文字按钮
+	<el-button type="text">...</el-button>
+-- 图标按钮
+	<el-button icon="el-icon-edit"></el-button>
+
+-- 按扭组 
+	<el-button-group>
+	  <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
+	  <el-button type="primary">
+	  	下一页<i class="el-icon-arrow-right el-icon--right"></i>
+	  </el-button>
+	</el-button-group>
+-- 按钮尺寸
+	<el-button size="medium">中等尺寸</el-button>
+	-- size的尺寸
+	. medium
+	. small 
+	. mini
+
+
+参数	说明	类型	可选值	默认值
+size	尺寸	string	medium / small / mini	—
+type	类型	string	primary / success / warning / danger / info / text	—
+plain	是否朴素按钮	boolean	—	false
+round	是否圆形按钮	boolean	—	false
+loading	是否加载中状态	boolean	—	false
+disabled	是否禁用状态	boolean	—	false
+icon	图标类名	string	—	—
+autofocus	是否默认聚焦	boolean	—	false
+native-type	原生 type 属性	string	button / submit / reset	button
+
+## 模板指令
+-- 数据渲染 v-text、 v-html
+-- 控制块显示 v-if、 v-show
+-- 渲染循环列表 v-for
+-- 事件绑定	v-on
+	<button v-on:click="doThis"></button>
+			|
+			V
+	methods: {
+		doThis: function (someThing) {
+	    }
+ 	}
+
+-- 属性绑定	v-bind
+	<img v-bind:src="imageSrc"> 		// 字符串
+	<div :class="{ red: isRed}"></div>  // 判断
+-- v-modal 表单数据
+
+-- data、 methods、 watch
+
+-- 缩写 
+	v-bind:href --> :href
+	v-on:click --> @click
+	v-text --> {{}}
+## 基础框架代码
+-- data 
+
+## 划分组件
+-- 功能模块
+-- 页面区域
+
+-- 组件间调用
+```javascript
+	import Header from './header' // 引入组件
+
+	new Vue({
+		components: {
+			Header 	// 注册组件
+		}
+	})
+```
+-- 组件间通信 props
+
+```javascript
+	// header.vue
+	new Vue({
+		data: {
+			...
+		},
+		props: ['msg'],
+		methods: {
+			fun: function() {
+				// msg
+			}
+		}
+	})
+
+	// app.vue
+	<header msg="message"></header>
+```
+
+-- 组件传参
+
+```javascript
+	// 父 --> 子
+	https://www.imooc.com/video/12307
+
+	// 子 --> 父
+	/*自定义事件*/
+	/*app.vue*/
+	<test v-bind:from-child-fun="fromChild"></test>
+	data () {
+		return {
+			childMessage : ''
+		}
+	}
+	fromChild: function(msg) {
+		this.childMessage = msg
+	}
+
+	/*child.vue*/
+	this.$emit('from-child-fun', this.msg)
+```
+
+--如何理解组件化.  
+	[如何理解组件化](https://git.papamk.com/bigbigads/bigbigads/wikis/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3vue%E7%9A%84%E7%BB%84%E4%BB%B6%E5%8C%96(%E8%8D%89%E7%A8%BF))
+
+## 关于Vue实例的生命周期created和mounted的区别
+
+###生命周期
+![生命周期图](http://ww1.sinaimg.cn/small/6aedb651gy1fmnbmyldjnj20xc2cfmyl.jpg)
+
+**什么是生命周期**
+>Vue实例有一个完整的生命周期，也就是从开始创建、初始化数据、编译模板、挂载Dom、渲染→更新→渲染、卸载等一系列过程，我们称这是Vue的生命周期。通俗说就是Vue实例从创建到销毁的过程，就是生命周期。
+
+![生命周期](https://ws1.sinaimg.cn/large/6aedb651gy1fmncxvp4doj20xc2cfaim.jpg)
