@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model {
 	protected $dates = ['published_at'];
 
+	protected $fillable = [
+		'title', 'subtitle', 'content_raw', 'page_image', 'meta_description', 'layout', 'is_draft', 'published_at',
+	];
+
 	/**
 	 * The many-to-many relationship between posts and tags.
 	 *
@@ -40,7 +44,7 @@ class Post extends Model {
 		$slug = str_slug($title . '-' . $extra);
 
 		if (static::whereSlug($slug)->exists()) {
-			$this->setUniqueSlug($title, $extra + 1);
+			$this->setUniqueSlug($title, (int) $extra + 1);
 			return;
 		}
 
@@ -75,5 +79,26 @@ class Post extends Model {
 		}
 
 		$this->tags()->detach();
+	}
+
+	/**
+	 * Return the date portion of published_at
+	 */
+	public function getPublishDateAttribute($value) {
+		return $this->published_at->format('M-j-Y');
+	}
+
+	/**
+	 * Return the time portion of published_at
+	 */
+	public function getPublishTimeAttribute($value) {
+		return $this->published_at->format('g:i A');
+	}
+
+	/**
+	 * Alias for content_raw
+	 */
+	public function getContentAttribute($value) {
+		return $this->content_raw;
 	}
 }
