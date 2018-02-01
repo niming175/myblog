@@ -2,14 +2,14 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
+use App\Post;
 use App\Tag;
 use Carbon\Carbon;
 use Illuminate\Contracts\Bus\SelfHandling;
 
 class PostFormFields extends Job implements SelfHandling {
-	/*
-	 * The id (id any) of the Post row
+	/**
+	 * The id (if any) of the Post row
 	 *
 	 * @var integer
 	 */
@@ -34,18 +34,18 @@ class PostFormFields extends Job implements SelfHandling {
 	];
 
 	/**
-	 * Create a new job instance.
+	 * Create a new command instance.
 	 *
-	 * @return void
+	 * @param integer $id
 	 */
-	public function __construct() {
-		//
+	public function __construct($id = null) {
+		$this->id = $id;
 	}
 
 	/**
-	 * Execute the job.
+	 * Execute the command.
 	 *
-	 * @return void
+	 * @return array of fieldnames => values
 	 */
 	public function handle() {
 		$fields = $this->fieldList;

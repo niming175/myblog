@@ -11,7 +11,7 @@ class PostUpdateRequest extends PostCreateRequest {
 	 * @return bool
 	 */
 	public function authorize() {
-		return false;
+		return true;
 	}
 
 	/**

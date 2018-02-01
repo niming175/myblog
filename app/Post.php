@@ -3,11 +3,13 @@
 namespace App;
 
 use App\Services\Markdowner;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+
+// 日期处理类库
 
 class Post extends Model {
 	protected $dates = ['published_at'];
-
 	protected $fillable = [
 		'title', 'subtitle', 'content_raw', 'page_image', 'meta_description', 'layout', 'is_draft', 'published_at',
 	];
@@ -28,9 +30,8 @@ class Post extends Model {
 	 */
 	public function setTitleAttribute($value) {
 		$this->attributes['title'] = $value;
-
 		if (!$this->exists) {
-			$this->setUniqueSlug($value, '');
+			$this->setUniqueSlug($value, 0);
 		}
 	}
 
@@ -43,8 +44,9 @@ class Post extends Model {
 	protected function setUniqueSlug($title, $extra) {
 		$slug = str_slug($title . '-' . $extra);
 
+		// 在创建的时候，会出现同一标题（title）,所以，要一个唯一的slug, 所以$extra + 1
 		if (static::whereSlug($slug)->exists()) {
-			$this->setUniqueSlug($title, (int) $extra + 1);
+			$this->setUniqueSlug($title, $extra + 1);
 			return;
 		}
 
@@ -100,5 +102,78 @@ class Post extends Model {
 	 */
 	public function getContentAttribute($value) {
 		return $this->content_raw;
+	}
+
+	// 接着在 Post 模型类中添加如下四个方法
+	/**
+	 * Return URL to post
+	 *
+	 * @param Tag $tag
+	 * @return string
+	 */
+	public function url(Tag $tag = null) {
+		$url = url('blog/' . $this->slug);
+		if ($tag) {
+			$url .= '?tag=' . urlencode($tag->tag);
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Return array of tag links
+	 *
+	 * @param string $base
+	 * @return array
+	 */
+	public function tagLinks($base = '/blog?tag=%TAG%') {
+		$tags = $this->tags()->lists('tag');
+		$return = [];
+		foreach ($tags as $tag) {
+			$url = str_replace('%TAG%', urlencode($tag), $base);
+			$return[] = '<a href="' . $url . '">' . e($tag) . '</a>';
+		}
+		return $return;
+	}
+
+	/**
+	 * Return next post after this one or null
+	 *
+	 * @param Tag $tag
+	 * @return Post
+	 */
+	public function newerPost(Tag $tag = null) {
+		$query =
+		static::where('published_at', '>', $this->published_at)
+			->where('published_at', '<=', Carbon::now())
+			->where('is_draft', 0)
+			->orderBy('published_at', 'asc');
+		if ($tag) {
+			$query = $query->whereHas('tags', function ($q) use ($tag) {
+				$q->where('tag', '=', $tag->tag);
+			});
+		}
+
+		return $query->first();
+	}
+
+	/**
+	 * Return older post before this one or null
+	 *
+	 * @param Tag $tag
+	 * @return Post
+	 */
+	public function olderPost(Tag $tag = null) {
+		$query =
+		static::where('published_at', '<', $this->published_at)
+			->where('is_draft', 0)
+			->orderBy('published_at', 'desc');
+		if ($tag) {
+			$query = $query->whereHas('tags', function ($q) use ($tag) {
+				$q->where('tag', '=', $tag->tag);
+			});
+		}
+
+		return $query->first();
 	}
 }

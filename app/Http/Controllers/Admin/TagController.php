@@ -2,125 +2,119 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\TagCreateRequest;
+use App\Http\Requests\TagUpdateRequest;
+use App\Tag;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+class TagController extends Controller {
 
-use App\Tag;
-use App\Http\Requests\TagCreateRequest;
+	protected $fields = [
+		'tag' => '',
+		'title' => '',
+		'subtitle' => '',
+		'meta_description' => '',
+		'page_image' => '',
+		'layout' => 'blog.layouts.index',
+		'reverse_direction' => 0,
+	];
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index() {
+		//
+		$tags = Tag::all();
+		return view('admin.tag.index')->withTags($tags);
+	}
 
-class TagController extends Controller
-{
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create() {
+		//
+		$data = [];
+		foreach ($this->fields as $field => $default) {
+			$data[$field] = old($field, $default);
+		}
+		return view('admin.tag.create', $data);
+	}
 
-     protected $fields = [
-        'tag' => '',
-        'title' => '',
-        'subtitle' => '',
-        'meta_description' => '',
-        'page_image' => '',
-        'layout' => 'blog.layouts.index',
-        'reverse_direction' => 0,
-    ];
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-        $tags = Tag::all();
-        return view('admin.tag.index')->withTags($tags);
-    }
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(TagCreateRequest $request) {
+		//
+		$tag = new Tag();
+		foreach (array_keys($this->fields) as $field) {
+			$tag->$field = $request->get($field);
+		}
+		$res = $tag->save(); // 保存成功，将放回1
+		if ($res) {
+			return redirect('/admin/tag')
+				->withSuccess("The tag '$tag->tag' was created.");
+		} else {
+			return redirect('/admin/tag')
+				->withErrors("have error!");
+		}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-        $data = [];
-        foreach ($this->fields as $field => $default) {
-            $data[$field] = old($field, $default);
-        }
+	}
 
-        return view('admin.tag.create', $data);
-    }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id) {
+		//
+		$tag = Tag::findOrFail($id);
+		$data = ['id' => $id];
+		foreach (array_keys($this->fields) as $field) {
+			$data[$field] = old($field, $tag->$field);
+		}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(TagCreateRequest $request)
-    {
-        //
-         $tag = new Tag();
-        foreach (array_keys($this->fields) as $field) {
-            $tag->$field = $request->get($field);
-        }
-        $tag->save();
+		return view('admin.tag.edit', $data);
+	}
 
-        return redirect('/admin/tag')
-                    ->withSuccess("The tag '$tag->tag' was created.");
-    }
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(TagUpdateRequest $request, $id) {
+		//
+		$tag = Tag::findOrFail($id);
+		foreach (array_keys(array_except($this->fields, ['tag'])) as $field) {
+			$tag->$field = $request->get($field);
+		}
+		$tag->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-        $tag = Tag::findOrFail($id);
-        $data = ['id' => $id];
-        foreach (array_keys($this->fields) as $field) {
-        $data[$field] = old($field, $tag->$field);
-    }
+		return redirect("/admin/tag/$id/edit")
+			->withSuccess("Changes saved.");
+	}
 
-    return view('admin.tag.edit', $data);
-    }
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id) {
+		//
+		$tag = Tag::findOrFail($id);
+		$tag->delete();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-         $tag = Tag::findOrFail($id);
-
-        foreach (array_keys(array_except($this->fields, ['tag'])) as $field) {
-            $tag->$field = $request->get($field);
-        }
-        $tag->save();
-
-        return redirect("/admin/tag/$id/edit")
-                        ->withSuccess("Changes saved.");
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-        $tag = Tag::findOrFail($id);
-        $tag->delete();
-
-        return redirect('/admin/tag')
-                        ->withSuccess("The '$tag->tag' tag has been deleted.");
-    }
+		return redirect('/admin/tag')
+			->withSuccess("The '$tag->tag' tag has been deleted.");
+	}
 }

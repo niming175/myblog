@@ -10,9 +10,7 @@ use App\Post;
 
 class PostController extends Controller {
 	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
+	 * Display a listing of the posts.
 	 */
 	public function index() {
 		return view('admin.post.index')
@@ -20,24 +18,19 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
+	 * Show the new post form
 	 */
 	public function create() {
 		$data = $this->dispatch(new PostFormFields());
-
 		return view('admin.post.create', $data);
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * Store a newly created Post
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
+	 * @param PostCreateRequest $request
 	 */
 	public function store(PostCreateRequest $request) {
-		//
 		$post = Post::create($request->postFillData());
 		$post->syncTags($request->get('tags', []));
 
@@ -47,20 +40,10 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Display the specified resource.
+	 * Show the post edit form
 	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id) {
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * @param int $id
+	 * @return Response
 	 */
 	public function edit($id) {
 		$data = $this->dispatch(new PostFormFields($id));
@@ -69,11 +52,10 @@ class PostController extends Controller {
 	}
 
 	/**
-	 * Update the specified resource in storage.
+	 * Update the Post
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * @param PostUpdateRequest $request
+	 * @param int $id
 	 */
 	public function update(PostUpdateRequest $request, $id) {
 		$post = Post::findOrFail($id);
@@ -95,8 +77,8 @@ class PostController extends Controller {
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * @param int $id
+	 * @return Response
 	 */
 	public function destroy($id) {
 		$post = Post::findOrFail($id);

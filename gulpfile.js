@@ -3,13 +3,13 @@ var rename = require('gulp-rename');
 var elixir = require('laravel-elixir');
 
 /**
- * 拷贝所有需要的文件
+ * 拷贝文件
  *
  * Do a 'gulp copyfiles' after bower updates
  */
 gulp.task("copyfiles", function() {
 
-    // 拷贝 jQuery, Bootstrap, 和 FontAwesome
+    // Copy jQuery, Bootstrap, and FontAwesome
     gulp.src("vendor/bower_dl/jquery/dist/jquery.js")
         .pipe(gulp.dest("resources/assets/js/"));
 
@@ -22,14 +22,14 @@ gulp.task("copyfiles", function() {
     gulp.src("vendor/bower_dl/bootstrap/dist/fonts/**")
         .pipe(gulp.dest("public/assets/fonts"));
 
-    gulp.src("vendor/bower_dl/font-awesome/less/**")
+    gulp.src("vendor/bower_dl/fontawesome/less/**")
         .pipe(gulp.dest("resources/assets/less/fontawesome"));
 
-    gulp.src("vendor/bower_dl/font-awesome/fonts/**")
+    gulp.src("vendor/bower_dl/fontawesome/fonts/**")
         .pipe(gulp.dest("public/assets/fonts"));
 
-    // 拷贝 datatables
-    var dtDir = 'vendor/bower_dl/datatables.net-plugins/integration/';
+    // Copy datatables
+    var dtDir = 'vendor/bower_dl/datatables-plugins/integration/';
 
     gulp.src("vendor/bower_dl/datatables/media/js/jquery.dataTables.js")
         .pipe(gulp.dest('resources/assets/js/'));
@@ -41,14 +41,14 @@ gulp.task("copyfiles", function() {
     gulp.src(dtDir + 'bootstrap/3/dataTables.bootstrap.js')
         .pipe(gulp.dest('resources/assets/js/'));
 
-     // Copy selectize
+    // Copy selectize
     gulp.src("vendor/bower_dl/selectize/dist/css/**")
         .pipe(gulp.dest("public/assets/selectize/css"));
 
     gulp.src("vendor/bower_dl/selectize/dist/js/standalone/selectize.min.js")
         .pipe(gulp.dest("public/assets/selectize/"));
 
-     // Copy pickadate
+    // Copy pickadate
     gulp.src("vendor/bower_dl/pickadate/lib/compressed/themes/**")
         .pipe(gulp.dest("public/assets/pickadate/themes/"));
 
@@ -61,6 +61,10 @@ gulp.task("copyfiles", function() {
     gulp.src("vendor/bower_dl/pickadate/lib/compressed/picker.time.js")
         .pipe(gulp.dest("public/assets/pickadate/"));
 
+    gulp.src("vendor/bower_dl/clean-blog/less/**")
+        .pipe(gulp.dest("resources/assets/less/clean-blog"));
+
+
 });
 
 /**
@@ -68,8 +72,9 @@ gulp.task("copyfiles", function() {
  */
 elixir(function(mix) {
 
-    // 合并脚本文件
-    mix.scripts([
+    // 合并 JS
+    mix.scripts(
+        [
             'js/jquery.js',
             'js/bootstrap.js',
             'js/jquery.dataTables.js',
@@ -78,7 +83,12 @@ elixir(function(mix) {
         'public/assets/js/admin.js',
         'resources/assets'
     );
-
+    mix.scripts([
+        'js/jquery.js',
+        'js/bootstrap.js',
+        'js/blog.js'
+    ], 'public/assets/js/blog.js', 'resources/assets');
     // 编译 Less
     mix.less('admin.less', 'public/assets/css/admin.css');
+    mix.less('blog.less', 'public/assets/css/blog.css');
 });

@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
 @section('content')
-<div class="container-fluid">
+<div class="container">
     <div class="row page-title-row">
         <div class="col-md-6">
             <h3>Posts <small>» Listing</small></h3>
@@ -12,6 +12,7 @@
             </a>
         </div>
     </div>
+    <hr>
 
     <div class="row">
         <div class="col-sm-12">
