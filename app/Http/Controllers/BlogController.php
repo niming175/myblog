@@ -22,7 +22,8 @@ class BlogController extends Controller {
 		if ($tag) {
 			$tag = Tag::whereTag($tag)->firstOrFail();
 		}
-
-		return view($post->layout, compact('post', 'tag'));
+		$url = env('APP_URL');
+		// return view($post->layout, compact('post', 'tag'));
+		return view($post->layout, compact('post', 'tag', 'slug', 'url'));
 	}
 }

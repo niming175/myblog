@@ -80,6 +80,5 @@
         @endif
       </ul>
     </div>
-
   </div>
 @stop

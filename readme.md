@@ -9,5 +9,7 @@ MAIL_HOST=mailtrap.io
 MAIL_PORT=2525
 MAIL_USERNAME=null
 MAIL_PASSWORD=null
+
+author_email= 自己的邮箱
 ```
 
